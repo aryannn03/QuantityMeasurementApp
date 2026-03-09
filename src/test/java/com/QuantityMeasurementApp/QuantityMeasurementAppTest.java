@@ -126,4 +126,70 @@ class QuantityMeasurementAppTest {
         assertTrue(result.equals(
                 new Length(0.003, Length.LengthUnit.FEET)));
     }
+    @Test
+    void testAddition_ExplicitTargetUnit_Feet() {
+
+        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
+        Length l2 = new Length(12.0, Length.LengthUnit.INCHES);
+
+        Length result = l1.add(l2, Length.LengthUnit.FEET);
+
+        assertEquals(new Length(2.0, Length.LengthUnit.FEET), result);
+    }
+
+    @Test
+    void testAddition_ExplicitTargetUnit_Inches() {
+
+        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
+        Length l2 = new Length(12.0, Length.LengthUnit.INCHES);
+
+        Length result = l1.add(l2, Length.LengthUnit.INCHES);
+
+        assertEquals(new Length(24.0, Length.LengthUnit.INCHES), result);
+    }
+
+    @Test
+    void testAddition_ExplicitTargetUnit_Yards() {
+
+        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
+        Length l2 = new Length(12.0, Length.LengthUnit.INCHES);
+
+        Length result = l1.add(l2, Length.LengthUnit.YARDS);
+
+        assertTrue(result.equals(new Length(2.0/3.0, Length.LengthUnit.YARDS)));
+    }
+
+    @Test
+    void testAddition_ExplicitTargetUnit_Centimeters() {
+
+        Length l1 = new Length(1.0, Length.LengthUnit.INCHES);
+        Length l2 = new Length(1.0, Length.LengthUnit.INCHES);
+
+        Length result = l1.add(l2, Length.LengthUnit.CENTIMETERS);
+
+        assertEquals(new Length(5.079997, Length.LengthUnit.CENTIMETERS),result);
+    }
+
+    @Test
+    void testAddition_ExplicitTargetUnit_Commutativity() {
+
+        Length a = new Length(1.0, Length.LengthUnit.FEET);
+        Length b = new Length(12.0, Length.LengthUnit.INCHES);
+
+        Length result1 = a.add(b, Length.LengthUnit.YARDS);
+        Length result2 = b.add(a, Length.LengthUnit.YARDS);
+
+        assertTrue(result1.equals(result2));
+    }
+
+    @Test
+    void testAddition_ExplicitTargetUnit_NullTargetUnit() {
+
+        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
+        Length l2 = new Length(12.0, Length.LengthUnit.INCHES);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            l1.add(l2, null);
+        });
+    }
 }

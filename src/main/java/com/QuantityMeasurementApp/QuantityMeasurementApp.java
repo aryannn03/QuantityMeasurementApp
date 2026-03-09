@@ -23,6 +23,15 @@ public class QuantityMeasurementApp {
 
         return l1.add(l2);
     }
+    public static Length demonstrateLengthAddition(Length l1,
+        Length l2,
+        Length.LengthUnit targetUnit) {
+        if (l1 == null || l2 == null){
+            throw new IllegalArgumentException("Length cannot be null");
+        }
+
+        return l1.add(l2, targetUnit);
+    }
 
     public static void main(String[] args) {
 
@@ -37,5 +46,14 @@ public class QuantityMeasurementApp {
         Length e = new Length(2.54, Length.LengthUnit.CENTIMETERS);
         Length f = new Length(1.0, Length.LengthUnit.INCHES);
         System.out.println(demonstrateLengthAddition(e, f));
+        System.out.println(demonstrateLengthAddition(a, b, Length.LengthUnit.FEET));
+        System.out.println(demonstrateLengthAddition(a, b, Length.LengthUnit.INCHES));
+        System.out.println(demonstrateLengthAddition(a, b, Length.LengthUnit.YARDS));
+        System.out.println(demonstrateLengthAddition(c, d, Length.LengthUnit.YARDS));
+
+        Length g = new Length(36.0, Length.LengthUnit.INCHES);
+        Length h = new Length(1.0, Length.LengthUnit.YARDS);
+
+        System.out.println(demonstrateLengthAddition(g, h, Length.LengthUnit.FEET));
     }
 }
