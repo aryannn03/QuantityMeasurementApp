@@ -1,7 +1,5 @@
 package com.QuantityMeasurementApp;
 
-import java.util.Scanner;
-
 public class QuantityMeasurementApp {
 
     public static class Feet {
@@ -10,10 +8,6 @@ public class QuantityMeasurementApp {
 
         public Feet(double value) {
             this.value = value;
-        }
-
-        public double getValue() {
-            return value;
         }
 
         @Override
@@ -39,23 +33,51 @@ public class QuantityMeasurementApp {
         }
     }
 
+    public static class Inches {
+
+        private final double value;
+
+        public Inches(double value) {
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+
+            if (this == obj)
+                return true;
+
+            if (obj == null)
+                return false;
+
+            if (getClass() != obj.getClass())
+                return false;
+
+            Inches other = (Inches) obj;
+
+            return Double.compare(this.value, other.value) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return Double.hashCode(value);
+        }
+    }
+
+    public static void demonstrateFeetEquality() {
+        Feet f1 = new Feet(1.0);
+        Feet f2 = new Feet(1.0);
+        System.out.println("Feet Equal: " + f1.equals(f2));
+    }
+
+    public static void demonstrateInchesEquality() {
+        Inches i1 = new Inches(1.0);
+        Inches i2 = new Inches(1.0);
+        System.out.println("Inches Equal: " + i1.equals(i2));
+    }
+
     public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter first value in feet: ");
-        double first = sc.nextDouble();
-
-        System.out.print("Enter second value in feet: ");
-        double second = sc.nextDouble();
-
-        Feet f1 = new Feet(first);
-        Feet f2 = new Feet(second);
-
-        boolean result = f1.equals(f2);
-
-        System.out.println("Equal: " + result);
-
-        sc.close();
+        demonstrateFeetEquality();
+        demonstrateInchesEquality();
     }
 }
