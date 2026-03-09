@@ -7,64 +7,63 @@ public class Length {
 
     private static final double EPSILON = 0.000001;
 
-    public enum LengthUnit {
-        INCHES(1.0),
-        FEET(12.0),
-        YARDS(36.0),
-        CENTIMETERS(0.393701);
-
-        private final double conversionFactor;
-
-        LengthUnit(double conversionFactor) {
-            this.conversionFactor = conversionFactor;
-        }
-
-        public double getConversionFactor() {
-            return conversionFactor;
-        }
-    }
-
     public Length(double value, LengthUnit unit) {
+
         if (unit == null)
             throw new IllegalArgumentException("Unit cannot be null");
+
         if (!Double.isFinite(value))
             throw new IllegalArgumentException("Invalid value");
+
         this.value = value;
         this.unit = unit;
     }
 
+    // Convert current value to base unit (inches)
     private double toBaseUnit() {
-        return value * unit.getConversionFactor();
+        return unit.convertToBaseUnit(value);
     }
 
+    // Convert this Length to another unit
     public Length convertTo(LengthUnit targetUnit) {
+
         if (targetUnit == null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
-        double baseValue = toBaseUnit();
-        double converted = baseValue / targetUnit.getConversionFactor();
+        double baseValue = unit.convertToBaseUnit(value);
+        double converted = targetUnit.convertFromBaseUnit(baseValue);
+
         return new Length(converted, targetUnit);
     }
 
+    // Static conversion helper
     public static double convert(double value, LengthUnit source, LengthUnit target) {
+
         if (source == null || target == null)
             throw new IllegalArgumentException("Unit cannot be null");
+
         if (!Double.isFinite(value))
             throw new IllegalArgumentException("Invalid value");
 
-        double baseValue = value * source.getConversionFactor();
-        return baseValue / target.getConversionFactor();
+        double baseValue = source.convertToBaseUnit(value);
+
+        return target.convertFromBaseUnit(baseValue);
     }
 
+    // Add two lengths using this unit as result unit
     public Length add(Length other) {
+
         if (other == null)
             throw new IllegalArgumentException("Length cannot be null");
 
         double baseSum = this.toBaseUnit() + other.toBaseUnit();
-        double resultValue = baseSum / this.unit.getConversionFactor();
 
-        return new Length(resultValue, this.unit);
+        double resultValue = unit.convertFromBaseUnit(baseSum);
+
+        return new Length(resultValue, unit);
     }
+
+    // Add two lengths with explicit target unit
     public Length add(Length other, LengthUnit targetUnit) {
 
         if (other == null)
@@ -74,7 +73,8 @@ public class Length {
             throw new IllegalArgumentException("Target unit cannot be null");
 
         double baseSum = this.toBaseUnit() + other.toBaseUnit();
-        double resultValue = baseSum / targetUnit.getConversionFactor();
+
+        double resultValue = targetUnit.convertFromBaseUnit(baseSum);
 
         return new Length(resultValue, targetUnit);
     }
