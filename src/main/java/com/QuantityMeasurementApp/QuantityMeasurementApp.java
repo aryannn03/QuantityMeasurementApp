@@ -33,6 +33,26 @@ public class QuantityMeasurementApp {
 
         return l1.add(l2, targetUnit);
     }
+    public static boolean demonstrateWeightEquality(Weight w1, Weight w2) {
+        return w1.equals(w2);
+    }
+
+    public static Weight demonstrateWeightConversion(Weight weight,
+                                                      WeightUnit to) {
+        return weight.convertTo(to);
+    }
+
+    public static Weight demonstrateWeightAddition(Weight w1, Weight w2) {
+        return w1.add(w2);
+    }
+
+    public static Weight demonstrateWeightAddition(
+            Weight w1,
+            Weight w2,
+            WeightUnit targetUnit) {
+
+        return w1.add(w2, targetUnit);
+    }
 
     public static void main(String[] args) {
 
@@ -57,5 +77,12 @@ public class QuantityMeasurementApp {
         Length h = new Length(1.0, LengthUnit.YARDS);
 
         System.out.println(demonstrateLengthAddition(g, h, LengthUnit.FEET));
+        
+        Weight w1 = new Weight(1.0, WeightUnit.KILOGRAM);
+        Weight w2 = new Weight(1000.0, WeightUnit.GRAM);
+
+        System.out.println("Weight equality: " + demonstrateWeightEquality(w1, w2));
+
+        System.out.println("Weight addition: " + demonstrateWeightAddition(w1, w2));
     }
 }

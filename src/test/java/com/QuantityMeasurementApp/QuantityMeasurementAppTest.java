@@ -193,4 +193,42 @@ class QuantityMeasurementAppTest {
             l1.add(l2, null);
         });
     }
+    @Test
+    void kilogramEqual1000grams() {
+
+        Weight w1 = new Weight(1.0, WeightUnit.KILOGRAM);
+        Weight w2 = new Weight(1000.0, WeightUnit.GRAM);
+
+        assertTrue(w1.equals(w2));
+    }
+
+    @Test
+    void poundEqual453grams() {
+
+        Weight w1 = new Weight(1.0, WeightUnit.POUND);
+        Weight w2 = new Weight(453.592, WeightUnit.GRAM);
+
+        assertTrue(w1.equals(w2));
+    }
+
+    @Test
+    void weightAddition_KgPlusGram() {
+
+        Weight w1 = new Weight(1.0, WeightUnit.KILOGRAM);
+        Weight w2 = new Weight(1000.0, WeightUnit.GRAM);
+
+        Weight result = w1.add(w2);
+
+        assertEquals(new Weight(2.0, WeightUnit.KILOGRAM), result);
+    }
+
+    @Test
+    void convertKgToGram() {
+
+        Weight w = new Weight(1.0, WeightUnit.KILOGRAM);
+
+        Weight result = w.convertTo(WeightUnit.GRAM);
+
+        assertEquals(new Weight(1000.0, WeightUnit.GRAM), result);
+    }
 }
