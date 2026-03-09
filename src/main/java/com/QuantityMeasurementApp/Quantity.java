@@ -1,13 +1,13 @@
 package com.QuantityMeasurementApp;
 
-public class Weight {
+public class Quantity<U extends IMeasurable> {
 
     private final double value;
-    private final WeightUnit unit;
+    private final U unit;
 
     private static final double EPSILON = 0.000001;
 
-    public Weight(double value, WeightUnit unit) {
+    public Quantity(double value, U unit) {
 
         if (unit == null)
             throw new IllegalArgumentException("Unit cannot be null");
@@ -19,47 +19,54 @@ public class Weight {
         this.unit = unit;
     }
 
+    public double getValue() {
+        return value;
+    }
+
+    public U getUnit() {
+        return unit;
+    }
+
     private double toBaseUnit() {
         return unit.convertToBaseUnit(value);
     }
 
-    public Weight convertTo(WeightUnit targetUnit) {
+    public Quantity<U> convertTo(U targetUnit) {
 
         if (targetUnit == null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
         double baseValue = unit.convertToBaseUnit(value);
-
         double converted = targetUnit.convertFromBaseUnit(baseValue);
 
-        return new Weight(converted, targetUnit);
+        return new Quantity<>(converted, targetUnit);
     }
 
-    public Weight add(Weight other) {
+    public Quantity<U> add(Quantity<U> other) {
 
         if (other == null)
-            throw new IllegalArgumentException("Weight cannot be null");
+            throw new IllegalArgumentException("Quantity cannot be null");
 
         double baseSum = this.toBaseUnit() + other.toBaseUnit();
 
-        double resultValue = unit.convertFromBaseUnit(baseSum);
+        double result = unit.convertFromBaseUnit(baseSum);
 
-        return new Weight(resultValue, unit);
+        return new Quantity<>(result, unit);
     }
 
-    public Weight add(Weight other, WeightUnit targetUnit) {
+    public Quantity<U> add(Quantity<U> other, U targetUnit) {
 
         if (other == null)
-            throw new IllegalArgumentException("Weight cannot be null");
+            throw new IllegalArgumentException("Quantity cannot be null");
 
         if (targetUnit == null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
         double baseSum = this.toBaseUnit() + other.toBaseUnit();
 
-        double resultValue = targetUnit.convertFromBaseUnit(baseSum);
+        double result = targetUnit.convertFromBaseUnit(baseSum);
 
-        return new Weight(resultValue, targetUnit);
+        return new Quantity<>(result, targetUnit);
     }
 
     @Override
@@ -68,13 +75,13 @@ public class Weight {
         if (this == obj)
             return true;
 
-        if (obj == null)
+        if (obj == null || getClass() != obj.getClass())
             return false;
 
-        if (getClass() != obj.getClass())
-            return false;
+        Quantity<?> other = (Quantity<?>) obj;
 
-        Weight other = (Weight) obj;
+        if (this.unit.getClass() != other.unit.getClass())
+            return false;
 
         return Math.abs(this.toBaseUnit() - other.toBaseUnit()) < EPSILON;
     }

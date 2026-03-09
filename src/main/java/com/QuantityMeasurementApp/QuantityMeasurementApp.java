@@ -2,87 +2,142 @@ package com.QuantityMeasurementApp;
 
 public class QuantityMeasurementApp {
 
-    public static boolean demonstrateLengthEquality(Length l1, Length l2) {
-        return l1.equals(l2);
-    }
+    /**
+     * Demonstrate equality comparison between two quantities.
+     */
+    public static <U extends IMeasurable> boolean demonstrateEquality(
+            Quantity<U> quantity1,
+            Quantity<U> quantity2) {
 
-    public static double demonstrateLengthConversion(double value,
-                                                     LengthUnit from,
-                                                     LengthUnit to) {
-        return Length.convert(value, from, to);
-    }
-
-    public static Length demonstrateLengthConversion(Length length,
-                                                      LengthUnit to) {
-        return length.convertTo(to);
-    }
-
-    public static Length demonstrateLengthAddition(Length l1, Length l2) {
-        if (l1 == null || l2 == null)
-            throw new IllegalArgumentException("Length cannot be null");
-
-        return l1.add(l2);
-    }
-
-    public static Length demonstrateLengthAddition(Length l1,
-                                                   Length l2,
-                                                   LengthUnit targetUnit) {
-        if (l1 == null || l2 == null) {
-            throw new IllegalArgumentException("Length cannot be null");
+        if (quantity1 == null || quantity2 == null) {
+            throw new IllegalArgumentException("Quantity cannot be null");
         }
 
-        return l1.add(l2, targetUnit);
-    }
-    public static boolean demonstrateWeightEquality(Weight w1, Weight w2) {
-        return w1.equals(w2);
+        return quantity1.equals(quantity2);
     }
 
-    public static Weight demonstrateWeightConversion(Weight weight,
-                                                      WeightUnit to) {
-        return weight.convertTo(to);
+    /**
+     * Demonstrate conversion of a quantity to a target unit.
+     */
+    public static <U extends IMeasurable> Quantity<U> demonstrateConversion(
+            Quantity<U> quantity,
+            U targetUnit) {
+
+        if (quantity == null)
+            throw new IllegalArgumentException("Quantity cannot be null");
+
+        if (targetUnit == null)
+            throw new IllegalArgumentException("Target unit cannot be null");
+
+        return quantity.convertTo(targetUnit);
     }
 
-    public static Weight demonstrateWeightAddition(Weight w1, Weight w2) {
-        return w1.add(w2);
+    /**
+     * Demonstrate addition of two quantities.
+     * Result returned in the unit of the first quantity.
+     */
+    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
+            Quantity<U> quantity1,
+            Quantity<U> quantity2) {
+
+        if (quantity1 == null || quantity2 == null)
+            throw new IllegalArgumentException("Quantity cannot be null");
+
+        return quantity1.add(quantity2);
     }
 
-    public static Weight demonstrateWeightAddition(
-            Weight w1,
-            Weight w2,
-            WeightUnit targetUnit) {
+    /**
+     * Demonstrate addition of two quantities with explicit target unit.
+     */
+    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
+            Quantity<U> quantity1,
+            Quantity<U> quantity2,
+            U targetUnit) {
 
-        return w1.add(w2, targetUnit);
+        if (quantity1 == null || quantity2 == null)
+            throw new IllegalArgumentException("Quantity cannot be null");
+
+        if (targetUnit == null)
+            throw new IllegalArgumentException("Target unit cannot be null");
+
+        return quantity1.add(quantity2, targetUnit);
     }
 
     public static void main(String[] args) {
 
-        Length a = new Length(1.0, LengthUnit.FEET);
-        Length b = new Length(12.0, LengthUnit.INCHES);
-        System.out.println(demonstrateLengthAddition(a, b));
+        // LENGTH EXAMPLE 
 
-        Length c = new Length(1.0, LengthUnit.YARDS);
-        Length d = new Length(3.0, LengthUnit.FEET);
-        System.out.println(demonstrateLengthAddition(c, d));
+        Quantity<LengthUnit> lengthInFeet =
+                new Quantity<>(1.0, LengthUnit.FEET);
 
-        Length e = new Length(2.54, LengthUnit.CENTIMETERS);
-        Length f = new Length(1.0, LengthUnit.INCHES);
-        System.out.println(demonstrateLengthAddition(e, f));
+        Quantity<LengthUnit> lengthInInches =
+                new Quantity<>(12.0, LengthUnit.INCHES);
 
-        System.out.println(demonstrateLengthAddition(a, b, LengthUnit.FEET));
-        System.out.println(demonstrateLengthAddition(a, b, LengthUnit.INCHES));
-        System.out.println(demonstrateLengthAddition(a, b, LengthUnit.YARDS));
-        System.out.println(demonstrateLengthAddition(c, d, LengthUnit.YARDS));
+        boolean lengthEqual =
+                demonstrateEquality(lengthInFeet, lengthInInches);
 
-        Length g = new Length(36.0, LengthUnit.INCHES);
-        Length h = new Length(1.0, LengthUnit.YARDS);
+        System.out.println("Are lengths equal? " + lengthEqual);
 
-        System.out.println(demonstrateLengthAddition(g, h, LengthUnit.FEET));
-        
-        Weight w1 = new Weight(1.0, WeightUnit.KILOGRAM);
-        Weight w2 = new Weight(1000.0, WeightUnit.GRAM);
+        Quantity<LengthUnit> convertedLength =
+                demonstrateConversion(lengthInFeet, LengthUnit.INCHES);
 
-        System.out.println("Weight equality: " + demonstrateWeightEquality(w1, w2));
+        System.out.println("Converted length: "
+                + convertedLength.getValue()
+                + " "
+                + convertedLength.getUnit());
 
-        System.out.println("Weight addition: " + demonstrateWeightAddition(w1, w2));
+        Quantity<LengthUnit> totalLength =
+                demonstrateAddition(lengthInFeet,
+                        lengthInInches,
+                        LengthUnit.FEET);
+
+        System.out.println("Total length: "
+                + totalLength.getValue()
+                + " "
+                + totalLength.getUnit());
+
+
+        // WEIGHT EXAMPLE 
+
+        Quantity<WeightUnit> weightInKg =
+                new Quantity<>(1.0, WeightUnit.KILOGRAM);
+
+        Quantity<WeightUnit> weightInGrams =
+                new Quantity<>(1000.0, WeightUnit.GRAM);
+
+        boolean weightEqual =
+                demonstrateEquality(weightInKg, weightInGrams);
+
+        System.out.println("Are weights equal? " + weightEqual);
+
+        Quantity<WeightUnit> convertedWeight =
+                demonstrateConversion(weightInGrams,
+                        WeightUnit.KILOGRAM);
+
+        System.out.println("Converted weight: "
+                + convertedWeight.getValue()
+                + " "
+                + convertedWeight.getUnit());
+
+        Quantity<WeightUnit> weightInPounds =
+                new Quantity<>(2.20462, WeightUnit.POUND);
+
+        Quantity<WeightUnit> totalWeight =
+                demonstrateAddition(weightInKg, weightInPounds);
+
+        System.out.println("Total weight: "
+                + totalWeight.getValue()
+                + " "
+                + totalWeight.getUnit());
+
+        Quantity<WeightUnit> weightInGramsResult =
+                demonstrateAddition(weightInKg,
+                        weightInPounds,
+                        WeightUnit.GRAM);
+
+        System.out.println("Total weight in grams: "
+                + weightInGramsResult.getValue()
+                + " "
+                + weightInGramsResult.getUnit());
     }
 }
