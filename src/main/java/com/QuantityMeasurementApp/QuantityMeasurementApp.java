@@ -17,22 +17,25 @@ public class QuantityMeasurementApp {
         return length.convertTo(to);
     }
 
+    public static Length demonstrateLengthAddition(Length l1, Length l2) {
+        if (l1 == null || l2 == null)
+            throw new IllegalArgumentException("Length cannot be null");
+
+        return l1.add(l2);
+    }
+
     public static void main(String[] args) {
 
-        System.out.println(demonstrateLengthConversion(1.0,
-                Length.LengthUnit.FEET,
-                Length.LengthUnit.INCHES));
+        Length a = new Length(1.0, Length.LengthUnit.FEET);
+        Length b = new Length(12.0, Length.LengthUnit.INCHES);
+        System.out.println(demonstrateLengthAddition(a, b));
 
-        System.out.println(demonstrateLengthConversion(3.0,
-                Length.LengthUnit.YARDS,
-                Length.LengthUnit.FEET));
+        Length c = new Length(1.0, Length.LengthUnit.YARDS);
+        Length d = new Length(3.0, Length.LengthUnit.FEET);
+        System.out.println(demonstrateLengthAddition(c, d));
 
-        System.out.println(demonstrateLengthConversion(36.0,
-                Length.LengthUnit.INCHES,
-                Length.LengthUnit.YARDS));
-
-        System.out.println(demonstrateLengthConversion(1.0,
-                Length.LengthUnit.CENTIMETERS,
-                Length.LengthUnit.INCHES));
+        Length e = new Length(2.54, Length.LengthUnit.CENTIMETERS);
+        Length f = new Length(1.0, Length.LengthUnit.INCHES);
+        System.out.println(demonstrateLengthAddition(e, f));
     }
 }
