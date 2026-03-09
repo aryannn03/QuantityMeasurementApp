@@ -5,7 +5,7 @@ public class Length {
     private final double value;
     private final LengthUnit unit;
 
-    private static final double EPSILON = 0.0001;
+    private static final double EPSILON = 0.000001;
 
     public enum LengthUnit {
         INCHES(1.0),
@@ -27,12 +27,33 @@ public class Length {
     public Length(double value, LengthUnit unit) {
         if (unit == null)
             throw new IllegalArgumentException("Unit cannot be null");
+        if (!Double.isFinite(value))
+            throw new IllegalArgumentException("Invalid value");
         this.value = value;
         this.unit = unit;
     }
 
     private double toBaseUnit() {
         return value * unit.getConversionFactor();
+    }
+
+    public Length convertTo(LengthUnit targetUnit) {
+        if (targetUnit == null)
+            throw new IllegalArgumentException("Target unit cannot be null");
+
+        double baseValue = toBaseUnit();
+        double converted = baseValue / targetUnit.getConversionFactor();
+        return new Length(converted, targetUnit);
+    }
+
+    public static double convert(double value, LengthUnit source, LengthUnit target) {
+        if (source == null || target == null)
+            throw new IllegalArgumentException("Unit cannot be null");
+        if (!Double.isFinite(value))
+            throw new IllegalArgumentException("Invalid value");
+
+        double baseValue = value * source.getConversionFactor();
+        return baseValue / target.getConversionFactor();
     }
 
     @Override
@@ -55,5 +76,10 @@ public class Length {
     @Override
     public int hashCode() {
         return Double.hashCode(toBaseUnit());
+    }
+
+    @Override
+    public String toString() {
+        return value + " " + unit;
     }
 }
