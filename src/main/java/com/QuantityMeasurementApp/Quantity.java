@@ -63,22 +63,39 @@ public class Quantity<U extends IMeasurable>{
 
         abstract double apply(double a,double b);
     }
+    private double performArithmetic(Quantity<U> other,ArithmeticOperation operation){
 
-    private double performArithmetic(Quantity<U> other, ArithmeticOperation operation){
-
-        if(other == null)
+        if(other==null)
             throw new IllegalArgumentException("Quantity cannot be null");
 
-        if(this.unit.getClass() != other.unit.getClass())
+        if(this.unit.getClass()!=other.unit.getClass())
             throw new IllegalArgumentException("Incompatible measurement categories");
 
-        double base1 = this.toBaseUnit();
-        double base2 = other.toBaseUnit();
+        switch(operation){
 
-        if(operation == ArithmeticOperation.DIVIDE && Math.abs(base2) < EPSILON)
+            case ADD:
+                if(!unit.supportsAddition())
+                    unit.validateOperationSupport("addition");
+                break;
+
+            case SUBTRACT:
+                if(!unit.supportsSubtraction())
+                    unit.validateOperationSupport("subtraction");
+                break;
+
+            case DIVIDE:
+                if(!unit.supportsDivision())
+                    unit.validateOperationSupport("division");
+                break;
+        }
+
+        double base1=this.toBaseUnit();
+        double base2=other.toBaseUnit();
+
+        if(operation==ArithmeticOperation.DIVIDE && Math.abs(base2)<EPSILON)
             throw new ArithmeticException("Division by zero");
 
-        return operation.apply(base1, base2);
+        return operation.apply(base1,base2);
     }
 
     // ADD 

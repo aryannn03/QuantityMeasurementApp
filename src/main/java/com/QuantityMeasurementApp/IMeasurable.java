@@ -9,4 +9,20 @@ public interface IMeasurable{
     double convertFromBaseUnit(double baseValue);
 
     String getUnitName();
+
+
+    default boolean supportsAddition(){
+        return true;
+    }
+
+    default boolean supportsSubtraction(){
+        return true;
+    }
+
+    default boolean supportsDivision(){
+        return true;
+    }
+
+    default void validateOperationSupport(String operation){
+    }
 }
