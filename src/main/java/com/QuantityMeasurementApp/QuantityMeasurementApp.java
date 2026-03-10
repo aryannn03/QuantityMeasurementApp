@@ -1,126 +1,81 @@
 package com.QuantityMeasurementApp;
 
-public class QuantityMeasurementApp {
+public class QuantityMeasurementApp{
 
-    /**
-     * Demonstrate equality comparison between two quantities.
-     */
-    public static <U extends IMeasurable> boolean demonstrateEquality(Quantity<U> quantity1,Quantity<U> quantity2) {
+    public static <U extends IMeasurable> boolean demonstrateEquality(
+            Quantity<U>quantity1,
+            Quantity<U>quantity2){
 
-        if (quantity1 == null || quantity2 == null) {
+        if(quantity1==null||quantity2==null)
             throw new IllegalArgumentException("Quantity cannot be null");
-        }
 
         return quantity1.equals(quantity2);
     }
 
-    /**
-     * Demonstrate conversion of a quantity to a target unit.
-     */
-    public static <U extends IMeasurable> Quantity<U> demonstrateConversion(Quantity<U> quantity,U targetUnit) {
+    public static <U extends IMeasurable> Quantity<U> demonstrateConversion(
+            Quantity<U>quantity,
+            U targetUnit){
 
-        if (quantity == null)
+        if(quantity==null)
             throw new IllegalArgumentException("Quantity cannot be null");
 
-        if (targetUnit == null)
+        if(targetUnit==null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
         return quantity.convertTo(targetUnit);
     }
 
-    /**
-     * Demonstrate addition of two quantities.
-     * Result returned in the unit of the first quantity.
-     */
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> quantity1,Quantity<U> quantity2) {
-
-        if (quantity1 == null || quantity2 == null)
-            throw new IllegalArgumentException("Quantity cannot be null");
+    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
+            Quantity<U>quantity1,
+            Quantity<U>quantity2){
 
         return quantity1.add(quantity2);
     }
 
-    /**
-     * Demonstrate addition of two quantities with explicit target unit.
-     */
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> quantity1,Quantity<U> quantity2,U targetUnit) {
+    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
+            Quantity<U>quantity1,
+            Quantity<U>quantity2,
+            U targetUnit){
 
-        if (quantity1 == null || quantity2 == null)
-            throw new IllegalArgumentException("Quantity cannot be null");
-
-        if (targetUnit == null)
-            throw new IllegalArgumentException("Target unit cannot be null");
-
-        return quantity1.add(quantity2, targetUnit);
+        return quantity1.add(quantity2,targetUnit);
     }
 
-    public static void main(String[] args) {
+    public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
+            Quantity<U>quantity1,
+            Quantity<U>quantity2){
 
-        // LENGTH EXAMPLE 
+        return quantity1.subtract(quantity2);
+    }
 
-        Quantity<LengthUnit> lengthInFeet =new Quantity<>(1.0, LengthUnit.FEET);
+    public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
+            Quantity<U>quantity1,
+            Quantity<U>quantity2,
+            U targetUnit){
 
-        Quantity<LengthUnit> lengthInInches =new Quantity<>(12.0, LengthUnit.INCHES);
+        return quantity1.subtract(quantity2,targetUnit);
+    }
 
-        boolean lengthEqual =demonstrateEquality(lengthInFeet, lengthInInches);
+    public static <U extends IMeasurable> double demonstrateDivision(
+            Quantity<U>quantity1,
+            Quantity<U>quantity2){
 
-        System.out.println("Are lengths equal? " + lengthEqual);
+        return quantity1.divide(quantity2);
+    }
 
-        Quantity<LengthUnit> convertedLength =demonstrateConversion(lengthInFeet, LengthUnit.INCHES);
+    public static void main(String[]args){
 
-        System.out.println("Converted length: "+ convertedLength.getValue()+ " "+ convertedLength.getUnit());
+        Quantity<LengthUnit>l1=new Quantity<>(10.0,LengthUnit.FEET);
+        Quantity<LengthUnit>l2=new Quantity<>(6.0,LengthUnit.INCHES);
 
-        Quantity<LengthUnit> totalLength =demonstrateAddition(lengthInFeet,lengthInInches,LengthUnit.FEET);
+        Quantity<LengthUnit>subResult=demonstrateSubtraction(l1,l2);
 
-        System.out.println("Total length: "+ totalLength.getValue()+ " "+ totalLength.getUnit());
+        System.out.println("Subtraction result: "
+                +subResult.getValue()+" "+subResult.getUnit());
 
+        double divisionResult=demonstrateDivision(
+                new Quantity<>(10.0,LengthUnit.FEET),
+                new Quantity<>(2.0,LengthUnit.FEET));
 
-        // WEIGHT EXAMPLE 
-
-        Quantity<WeightUnit> weightInKg =new Quantity<>(1.0, WeightUnit.KILOGRAM);
-
-        Quantity<WeightUnit> weightInGrams =new Quantity<>(1000.0, WeightUnit.GRAM);
-
-        boolean weightEqual =demonstrateEquality(weightInKg, weightInGrams);
-
-        System.out.println("Are weights equal? " + weightEqual);
-
-        Quantity<WeightUnit> convertedWeight =demonstrateConversion(weightInGrams,WeightUnit.KILOGRAM);
-
-        System.out.println("Converted weight: "+ convertedWeight.getValue()+ " "+ convertedWeight.getUnit());
-
-        Quantity<WeightUnit> weightInPounds =new Quantity<>(2.20462, WeightUnit.POUND);
-
-        Quantity<WeightUnit> totalWeight =demonstrateAddition(weightInKg, weightInPounds);
-
-        System.out.println("Total weight: "+ totalWeight.getValue()+ " "+ totalWeight.getUnit());
-
-        Quantity<WeightUnit> weightInGramsResult =demonstrateAddition(weightInKg,weightInPounds,WeightUnit.GRAM);
-
-        System.out.println("Total weight in grams: "+ weightInGramsResult.getValue()+ " "+ weightInGramsResult.getUnit());
-        
-     // VOLUME EXAMPLE
-
-        Quantity<VolumeUnit>volumeInLitre=new Quantity<>(1.0,VolumeUnit.LITRE);
-
-        Quantity<VolumeUnit>volumeInMilli=new Quantity<>(1000.0,VolumeUnit.MILLILITRE);
-
-        boolean volumeEqual=demonstrateEquality(volumeInLitre,volumeInMilli);
-
-        System.out.println("Are volumes equal? "+volumeEqual);
-
-        Quantity<VolumeUnit>convertedVolume=demonstrateConversion(volumeInLitre,VolumeUnit.MILLILITRE);
-
-        System.out.println("Converted volume: "+convertedVolume.getValue()+" "+convertedVolume.getUnit());
-
-        Quantity<VolumeUnit>volumeInGallon=new Quantity<>(1.0,VolumeUnit.GALLON);
-
-        Quantity<VolumeUnit>totalVolume=demonstrateAddition(volumeInLitre,volumeInMilli);
-
-        System.out.println("Total volume: "+totalVolume.getValue()+" "+totalVolume.getUnit());
-
-        Quantity<VolumeUnit>volumeInMilliResult=demonstrateAddition(volumeInLitre,volumeInGallon,VolumeUnit.MILLILITRE);
-
-        System.out.println("Total volume in millilitre: "+volumeInMilliResult.getValue()+" "+volumeInMilliResult.getUnit());
+        System.out.println("Division result: "+divisionResult);
     }
 }
