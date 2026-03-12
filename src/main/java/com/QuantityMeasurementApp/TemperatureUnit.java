@@ -74,4 +74,9 @@ public enum TemperatureUnit implements IMeasurable{
         throw new UnsupportedOperationException(
                 "Temperature does not support "+operation+" operation");
     }
+
+	@Override
+	public String getMeasurementType() {
+		return "Temperature";
+	}
 }

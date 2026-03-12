@@ -1,81 +1,33 @@
 package com.QuantityMeasurementApp;
 
-public class QuantityMeasurementApp{
+import com.QuantityMeasurementApp.controller.QuantityMeasurementController;
+import com.QuantityMeasurementApp.dto.QuantityDTO;
+import com.QuantityMeasurementApp.repository.QuantityMeasurementCacheRepository;
+import com.QuantityMeasurementApp.service.QuantityMeasurementServiceImpl;
 
-    public static <U extends IMeasurable> boolean demonstrateEquality(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2){
+public class QuantityMeasurementApp {
 
-        if(quantity1==null||quantity2==null)
-            throw new IllegalArgumentException("Quantity cannot be null");
+    public static void main(String[] args) {
 
-        return quantity1.equals(quantity2);
-    }
+        // initialize repository
+        QuantityMeasurementCacheRepository repository =
+                QuantityMeasurementCacheRepository.getInstance();
 
-    public static <U extends IMeasurable> Quantity<U> demonstrateConversion(
-            Quantity<U>quantity,
-            U targetUnit){
+        // initialize service
+        QuantityMeasurementServiceImpl service =
+                new QuantityMeasurementServiceImpl(repository);
 
-        if(quantity==null)
-            throw new IllegalArgumentException("Quantity cannot be null");
+        // initialize controller
+        QuantityMeasurementController controller =
+                new QuantityMeasurementController(service);
 
-        if(targetUnit==null)
-            throw new IllegalArgumentException("Target unit cannot be null");
+        // example quantities
+        QuantityDTO q1 = new QuantityDTO(10, "FEET", "Length");
+        QuantityDTO q2 = new QuantityDTO(6, "INCHES", "Length");
 
-        return quantity.convertTo(targetUnit);
-    }
+        // call controller
+        QuantityDTO result = controller.performAddition(q1, q2);
 
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2){
-
-        return quantity1.add(quantity2);
-    }
-
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2,
-            U targetUnit){
-
-        return quantity1.add(quantity2,targetUnit);
-    }
-
-    public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2){
-
-        return quantity1.subtract(quantity2);
-    }
-
-    public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2,
-            U targetUnit){
-
-        return quantity1.subtract(quantity2,targetUnit);
-    }
-
-    public static <U extends IMeasurable> double demonstrateDivision(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2){
-
-        return quantity1.divide(quantity2);
-    }
-
-    public static void main(String[]args){
-
-        Quantity<LengthUnit>l1=new Quantity<>(10.0,LengthUnit.FEET);
-        Quantity<LengthUnit>l2=new Quantity<>(6.0,LengthUnit.INCHES);
-
-        Quantity<LengthUnit>subResult=demonstrateSubtraction(l1,l2);
-
-        System.out.println("Subtraction result: "
-                +subResult.getValue()+" "+subResult.getUnit());
-
-        double divisionResult=demonstrateDivision(
-                new Quantity<>(10.0,LengthUnit.FEET),
-                new Quantity<>(2.0,LengthUnit.FEET));
-
-        System.out.println("Division result: "+divisionResult);
+        System.out.println("Addition result: " + result);
     }
 }
