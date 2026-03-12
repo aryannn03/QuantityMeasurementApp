@@ -2,32 +2,41 @@ package com.QuantityMeasurementApp;
 
 import com.QuantityMeasurementApp.controller.QuantityMeasurementController;
 import com.QuantityMeasurementApp.dto.QuantityDTO;
+import com.QuantityMeasurementApp.repository.IQuantityMeasurementRepository;
 import com.QuantityMeasurementApp.repository.QuantityMeasurementCacheRepository;
+import com.QuantityMeasurementApp.repository.QuantityMeasurementDatabaseRepository;
 import com.QuantityMeasurementApp.service.QuantityMeasurementServiceImpl;
+import com.QuantityMeasurementApp.util.ApplicationConfig;
 
 public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        // initialize repository
-        QuantityMeasurementCacheRepository repository =
-                QuantityMeasurementCacheRepository.getInstance();
+        IQuantityMeasurementRepository repository;
 
-        // initialize service
+        String repositoryType =
+                ApplicationConfig.getProperty("repository.type", "cache");
+
+        if (repositoryType.equalsIgnoreCase("database")) {
+
+            repository = new QuantityMeasurementDatabaseRepository();
+
+        } else {
+
+            repository = QuantityMeasurementCacheRepository.getInstance();
+        }
+
         QuantityMeasurementServiceImpl service =
                 new QuantityMeasurementServiceImpl(repository);
 
-        // initialize controller
         QuantityMeasurementController controller =
                 new QuantityMeasurementController(service);
 
-        // example quantities
         QuantityDTO q1 = new QuantityDTO(10, "FEET", "Length");
-        QuantityDTO q2 = new QuantityDTO(6, "INCHES", "Length");
+        QuantityDTO q2 = new QuantityDTO(2, "FEET", "Length");
 
-        // call controller
-        QuantityDTO result = controller.performAddition(q1, q2);
+        double result = controller.performDivision(q1, q2);
 
-        System.out.println("Addition result: " + result);
+        System.out.println("Division result: " + result);
     }
 }

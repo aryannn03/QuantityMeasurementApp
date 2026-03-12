@@ -15,6 +15,12 @@
     </properties>
 
     <dependencies>
+        <!-- H2 Database (Required for UC16 JDBC connection) --> 
+        <dependency>
+            <groupId>com.h2database</groupId> 
+            <artifactId>h2</artifactId> 
+            <version>2.2.224</version> 
+            </dependency>
         <!-- JUnit 5 (Modern & Clean) -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

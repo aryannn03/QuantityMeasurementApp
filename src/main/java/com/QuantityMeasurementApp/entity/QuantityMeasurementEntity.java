@@ -1,24 +1,68 @@
 package com.QuantityMeasurementApp.entity;
 
-import java.io.Serializable;
+public class QuantityMeasurementEntity {
 
-public class QuantityMeasurementEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+    private int id;
+    private double thisValue;
+    private String thisUnit;
+    private String measurementType;
     private String operation;
-    private String result;
+    private String resultString;
 
-    public QuantityMeasurementEntity(String operation, String result) {
+    public QuantityMeasurementEntity() {
+    }
+
+    public QuantityMeasurementEntity(String operation, String resultString) {
         this.operation = operation;
-        this.result = result;
+        this.resultString = resultString;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
+    public double getThisValue() {
+        return thisValue;
+    }
+
+    public void setThisValue(double thisValue) {
+        this.thisValue = thisValue;
+    }
+
+    public String getThisUnit() {
+        return thisUnit;
+    }
+
+    public void setThisUnit(String thisUnit) {
+        this.thisUnit = thisUnit;
+    }
+
+    public String getMeasurementType() {
+        return measurementType;
+    }
+
+    public void setMeasurementType(String measurementType) {
+        this.measurementType = measurementType;
     }
 
     public String getOperation() {
         return operation;
     }
 
-    public String getResult() {
-        return result;
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+
+    public String getResultString() {
+        return resultString;
+    }
+
+    public void setResultString(String resultString) {
+        this.resultString = resultString;
     }
 }
