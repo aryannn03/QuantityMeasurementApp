@@ -77,5 +77,17 @@ public class QuantityMeasurementApp{
                 new Quantity<>(2.0,LengthUnit.FEET));
 
         System.out.println("Division result: "+divisionResult);
+        Quantity<TemperatureUnit> temp1 =
+                new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+
+        Quantity<TemperatureUnit> temp2 =
+                new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+
+        System.out.println("0C equals 32F: " + temp1.equals(temp2));
+
+        Quantity<TemperatureUnit> converted =
+                temp1.convertTo(TemperatureUnit.FAHRENHEIT);
+
+        System.out.println("0C in Fahrenheit: " + converted.getValue());
     }
 }
