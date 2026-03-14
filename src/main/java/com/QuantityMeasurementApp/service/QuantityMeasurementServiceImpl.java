@@ -1,7 +1,7 @@
 package com.QuantityMeasurementApp.service;
 
-import com.QuantityMeasurementApp.IMeasurable;
-import com.QuantityMeasurementApp.Quantity;
+import com.QuantityMeasurementApp.unit.IMeasurable;
+import com.QuantityMeasurementApp.quantity.Quantity;
 import com.QuantityMeasurementApp.dto.QuantityDTO;
 import com.QuantityMeasurementApp.repository.IQuantityMeasurementRepository;
 import com.QuantityMeasurementApp.entity.QuantityMeasurementEntity;
