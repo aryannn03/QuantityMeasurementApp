@@ -36,6 +36,6 @@ public enum WeightUnit implements IMeasurable{
 
 	@Override
 	public String getMeasurementType() {
-		return "Length";
+		return "Weight";
 	}
 }

@@ -251,5 +251,101 @@ public class QuantityMeasurementAppTest{
 
         assertThrows(IllegalArgumentException.class,()->a.divide(null));
     }
+     // ADDITION TESTS
+    
+    @Test
+    void testAddition_SameUnit_FeetPlusFeet(){
+        Quantity<LengthUnit> a = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> b = new Quantity<>(5.0, LengthUnit.FEET);
+
+        Quantity<LengthUnit> result = a.add(b);
+
+        assertEquals(15.0, result.getValue(), EPSILON);
+    }
+
+    @Test
+    void testAddition_CrossUnit_FeetPlusInches(){
+        Quantity<LengthUnit> a = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> b = new Quantity<>(6.0, LengthUnit.INCHES);
+
+        Quantity<LengthUnit> result = a.add(b);
+
+        assertEquals(10.5, result.getValue(), EPSILON);
+    }
+
+    @Test
+    void testAddition_ExplicitTargetUnit_Inches(){
+        Quantity<LengthUnit> a = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> b = new Quantity<>(6.0, LengthUnit.INCHES);
+
+        Quantity<LengthUnit> result = a.add(b, LengthUnit.INCHES);
+
+        assertEquals(126.0, result.getValue(), EPSILON);
+    }
+    
+    // CONVERSION TESTS
+    
+    @Test
+    void testConversion_FeetToInches(){
+        Quantity<LengthUnit> q = new Quantity<>(1.0, LengthUnit.FEET);
+
+        Quantity<LengthUnit> result = q.convertTo(LengthUnit.INCHES);
+
+        assertEquals(12.0, result.getValue(), EPSILON);
+    }
+
+    @Test
+    void testConversion_LitreToMillilitre(){
+        Quantity<VolumeUnit> q = new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> result = q.convertTo(VolumeUnit.MILLILITRE);
+
+        assertEquals(1000.0, result.getValue(), EPSILON);
+    }
+    
+    // EQUALITY TESTS
+    
+    @Test
+    void testEquality_SameUnit(){
+        Quantity<LengthUnit> a = new Quantity<>(5.0, LengthUnit.FEET);
+        Quantity<LengthUnit> b = new Quantity<>(5.0, LengthUnit.FEET);
+
+        assertTrue(a.equals(b));
+    }
+
+    @Test
+    void testEquality_CrossUnit(){
+        Quantity<LengthUnit> a = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<LengthUnit> b = new Quantity<>(12.0, LengthUnit.INCHES);
+
+        assertTrue(a.equals(b));
+    }
+    
+    // TEMPERATURE TESTS
+    
+    @Test
+    void testTemperatureEquality(){
+        Quantity<TemperatureUnit> c = new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+        Quantity<TemperatureUnit> f = new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+
+        assertTrue(c.equals(f));
+    }
+
+    @Test
+    void testTemperatureConversion(){
+        Quantity<TemperatureUnit> c = new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+
+        Quantity<TemperatureUnit> result = c.convertTo(TemperatureUnit.FAHRENHEIT);
+
+        assertEquals(212.0, result.getValue(), EPSILON);
+    }
+
+    @Test
+    void testTemperatureUnsupportedAddition(){
+        Quantity<TemperatureUnit> t1 = new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+        Quantity<TemperatureUnit> t2 = new Quantity<>(50.0, TemperatureUnit.CELSIUS);
+
+        assertThrows(UnsupportedOperationException.class, () -> t1.add(t2));
+    }
 
 }
