@@ -1,24 +1,14 @@
 package com.QuantityMeasurementApp.exception;
 
-public class DatabaseException extends QuantityMeasurementException {
+public class DatabaseException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
 
     public DatabaseException(String message) {
         super(message);
     }
 
     public DatabaseException(String message, Throwable cause) {
-        super(message);
-    }
-
-    public static DatabaseException connectionFailed(String details, Throwable cause) {
-        return new DatabaseException("Database connection failed: " + details);
-    }
-
-    public static DatabaseException queryFailed(String query, Throwable cause) {
-        return new DatabaseException("Query execution failed: " + query);
-    }
-
-    public static DatabaseException transactionFailed(String operation, Throwable cause) {
-        return new DatabaseException("Transaction failed during: " + operation);
+        super(message, cause);
     }
 }

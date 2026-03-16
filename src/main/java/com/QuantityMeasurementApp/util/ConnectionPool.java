@@ -1,69 +1,62 @@
 package com.QuantityMeasurementApp.util;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.io.InputStream;
-import java.util.Scanner;
 
 public class ConnectionPool {
 
-    private static Connection connection;
+    private static HikariDataSource dataSource;
 
-    public static Connection getConnection() {
-
+    static {
         try {
+            HikariConfig config = new HikariConfig();
 
-            if (connection == null || connection.isClosed()) {
+            config.setJdbcUrl(ApplicationConfig.getDbUrl());
+            config.setUsername(ApplicationConfig.getDbUsername());
+            config.setPassword(ApplicationConfig.getDbPassword());
+            config.setDriverClassName(ApplicationConfig.getDbDriver());
 
-                String url = ApplicationConfig.getProperty("db.url");
-                String username = ApplicationConfig.getProperty("db.username");
-                String password = ApplicationConfig.getProperty("db.password");
+            config.setMaximumPoolSize(ApplicationConfig.getMaxPoolSize());
+            config.setMinimumIdle(ApplicationConfig.getMinIdle());
 
-                connection = DriverManager.getConnection(url, username, password);
-
-                runSchema(connection);
-            }
-
-            return connection;
+            dataSource = new HikariDataSource(config);
 
         } catch (Exception e) {
-            throw new RuntimeException("Database connection error", e);
+            throw new RuntimeException("Failed to initialize connection pool", e);
         }
     }
 
-    private static void runSchema(Connection connection) {
+    public static Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
 
-        try {
+    public static void close() {
+        if (dataSource != null) {
+            dataSource.close();
+        }
+    }
+    public static void initializeDatabase() {
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
 
             InputStream input = ConnectionPool.class
                     .getClassLoader()
                     .getResourceAsStream("db/schema.sql");
 
             if (input == null) {
-                System.out.println("schema.sql not found");
-                return;
+                throw new RuntimeException("schema.sql not found");
             }
 
-            Scanner scanner = new Scanner(input).useDelimiter(";");
-            Statement statement = connection.createStatement();
-
-            while (scanner.hasNext()) {
-
-                String sql = scanner.next().trim();
-
-                if (!sql.isEmpty()) {
-                    statement.execute(sql);
-                }
-            }
-
-            scanner.close();
-
-            System.out.println("Schema loaded successfully");
+            String sql = new String(input.readAllBytes());
+            statement.execute(sql);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to initialize database", e);
         }
     }
 }

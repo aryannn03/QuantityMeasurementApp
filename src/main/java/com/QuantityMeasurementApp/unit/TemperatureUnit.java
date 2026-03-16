@@ -1,4 +1,4 @@
-package com.QuantityMeasurementApp;
+package com.QuantityMeasurementApp.unit;
 
 public enum TemperatureUnit implements IMeasurable{
 

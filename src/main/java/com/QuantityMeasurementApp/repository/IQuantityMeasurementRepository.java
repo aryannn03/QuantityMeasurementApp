@@ -1,7 +1,7 @@
 package com.QuantityMeasurementApp.repository;
 
-import com.QuantityMeasurementApp.entity.QuantityMeasurementEntity;
 import java.util.List;
+import com.QuantityMeasurementApp.entity.QuantityMeasurementEntity;
 
 public interface IQuantityMeasurementRepository {
 
