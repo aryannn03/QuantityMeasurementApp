@@ -36,7 +36,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         )
 
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/oauth2/**", "/login/**").permitAll()
+            .requestMatchers("/auth/**", "/oauth2/**").permitAll()
             .anyRequest().authenticated()
         )
 
