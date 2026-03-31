@@ -19,10 +19,11 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     // 🔹 Convert DTO → Quantity Model
     private Quantity convertDTOToQuantity(QuantityDTO dto){
 
-        String unitName=dto.getUnit();
+    	String unitName = dto.getUnit().trim().toUpperCase();
+    	String type = dto.getMeasurementType().trim().toUpperCase();
         double value=dto.getValue();
 
-        switch(dto.getMeasurementType().toUpperCase()){
+        switch(type){
 
             case "LENGTH":
                 return new Quantity(value,LengthUnit.valueOf(unitName));
@@ -82,8 +83,10 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
             return result;
 
         }catch(Exception e){
-            throw new QuantityMeasurementException(e.getMessage());
-        }
+            throw new QuantityMeasurementException(
+                    "Operation failed: " + e.getMessage(), e
+                );
+            }
     }
 
     // 🔥 CONVERT
@@ -93,6 +96,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         try{
 
             Quantity quantity=convertDTOToQuantity(source);
+            targetUnit = targetUnit.trim().toUpperCase();
 
             IMeasurable unit=(IMeasurable)Enum.valueOf(
                     (Class<? extends Enum>)quantity.getUnit().getClass(),
@@ -112,8 +116,10 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
             return convertQuantityToDTO(result);
 
         }catch(Exception e){
-            throw new QuantityMeasurementException(e.getMessage());
-        }
+            throw new QuantityMeasurementException(
+                    "Operation failed: " + e.getMessage(), e
+                );
+            }
     }
 
     // 🔥 ADD
@@ -124,6 +130,9 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             Quantity quantity1=convertDTOToQuantity(q1);
             Quantity quantity2=convertDTOToQuantity(q2);
+            validateArithmetic(quantity1);
+            validateArithmetic(quantity2);
+            validateSameType(q1, q2);
 
             Quantity result=quantity1.add(quantity2);
 
@@ -138,8 +147,10 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
             return convertQuantityToDTO(result);
 
         }catch(Exception e){
-            throw new QuantityMeasurementException(e.getMessage());
-        }
+            throw new QuantityMeasurementException(
+                    "Operation failed: " + e.getMessage(), e
+                );
+            }
     }
 
     // 🔥 SUBTRACT
@@ -150,6 +161,9 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             Quantity quantity1=convertDTOToQuantity(q1);
             Quantity quantity2=convertDTOToQuantity(q2);
+            validateArithmetic(quantity1);
+            validateArithmetic(quantity2);
+            validateSameType(q1, q2);
 
             Quantity result=quantity1.subtract(quantity2);
 
@@ -164,8 +178,10 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
             return convertQuantityToDTO(result);
 
         }catch(Exception e){
-            throw new QuantityMeasurementException(e.getMessage());
-        }
+            throw new QuantityMeasurementException(
+                    "Operation failed: " + e.getMessage(), e
+                );
+            }
     }
 
     // 🔥 DIVIDE
@@ -176,6 +192,9 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             Quantity quantity1=convertDTOToQuantity(q1);
             Quantity quantity2=convertDTOToQuantity(q2);
+            validateArithmetic(quantity1);
+            validateArithmetic(quantity2);
+            validateSameType(q1, q2);
 
             double result=quantity1.divide(quantity2);
 
@@ -190,8 +209,10 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
             return result;
 
         }catch(Exception e){
-            throw new QuantityMeasurementException(e.getMessage());
-        }
+            throw new QuantityMeasurementException(
+                    "Operation failed: " + e.getMessage(), e
+                );
+            }
     }
     @Override
     public List<QuantityMeasurementEntity> getHistory(String operation){
@@ -201,5 +222,20 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     @Override
     public long getCount(String operation){
         return repository.countByOperation(operation);
+    }
+    private void validateArithmetic(Quantity quantity) {
+        if (!quantity.getUnit().supportsArithmetic()) {
+            throw new QuantityMeasurementException(
+                "Operation not supported for " + quantity.getUnit()
+            );
+        }
+    }
+    private void validateSameType(QuantityDTO q1, QuantityDTO q2) {
+        String type1 = q1.getMeasurementType().trim().toUpperCase();
+        String type2 = q2.getMeasurementType().trim().toUpperCase();
+
+        if (!type1.equals(type2)) {
+            throw new QuantityMeasurementException("Different measurement types");
+        }
     }
 }
