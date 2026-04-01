@@ -36,7 +36,9 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         )
 
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/**", "/oauth2/**").permitAll()
+            .requestMatchers("/auth/**", "/oauth2/**","/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui.html").permitAll()
             .anyRequest().authenticated()
         )
 
