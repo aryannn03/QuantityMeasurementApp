@@ -16,36 +16,36 @@ public class QuantityMeasurementEntity {
     private String operation;
     private String result;
 
+    private String userEmail; // ✅ ADD THIS
+
     private LocalDateTime createdAt;
 
     public QuantityMeasurementEntity(){}
 
-    public QuantityMeasurementEntity(String operand1,String operand2,String operation,String result){
-        this.operand1=operand1;
-        this.operand2=operand2;
-        this.operation=operation;
-        this.result=result;
+    // ✅ ADD userEmail to constructor
+    public QuantityMeasurementEntity(String operand1, String operand2,
+                                      String operation, String result,
+                                      String userEmail){
+        this.operand1  = operand1;
+        this.operand2  = operand2;
+        this.operation = operation;
+        this.result    = result;
+        this.userEmail = userEmail; // ✅
     }
 
     @PrePersist
-    public void onCreate(){
-        this.createdAt=LocalDateTime.now();
-    }
+    public void onCreate(){ this.createdAt = LocalDateTime.now(); }
 
-    // getters & setters
-    public Long getId(){ return id; }
-
-    public String getOperand1(){ return operand1; }
-    public void setOperand1(String operand1){ this.operand1=operand1; }
-
-    public String getOperand2(){ return operand2; }
-    public void setOperand2(String operand2){ this.operand2=operand2; }
-
-    public String getOperation(){ return operation; }
-    public void setOperation(String operation){ this.operation=operation; }
-
-    public String getResult(){ return result; }
-    public void setResult(String result){ this.result=result; }
-
+    public Long getId()              { return id; }
+    public String getOperand1()      { return operand1; }
+    public void setOperand1(String o){ this.operand1 = o; }
+    public String getOperand2()      { return operand2; }
+    public void setOperand2(String o){ this.operand2 = o; }
+    public String getOperation()     { return operation; }
+    public void setOperation(String o){ this.operation = o; }
+    public String getResult()        { return result; }
+    public void setResult(String r)  { this.result = r; }
+    public String getUserEmail()     { return userEmail; }       // ✅
+    public void setUserEmail(String e){ this.userEmail = e; }    // ✅
     public LocalDateTime getCreatedAt(){ return createdAt; }
 }

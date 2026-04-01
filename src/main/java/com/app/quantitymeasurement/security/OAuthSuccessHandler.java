@@ -44,7 +44,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         String token = jwtService.generateToken(email);
 
-        response.setContentType("application/json");
-        response.getWriter().write("{\"token\":\"" + token + "\"}");
+        String redirectUrl = "http://127.0.0.1:5500/index.html?token=" + token;
+        response.sendRedirect(redirectUrl);
     }
 }
