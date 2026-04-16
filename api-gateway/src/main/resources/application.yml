@@ -1,0 +1,39 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "${FRONTEND_URL:http://localhost:4200}"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+            maxAge: 3600
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
+
+      routes:
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/auth/**,/oauth2/**,/login/**
+
+        - id: qma-service
+          uri: ${QMA_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/v1/quantities/**
