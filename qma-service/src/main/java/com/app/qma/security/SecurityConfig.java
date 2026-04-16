@@ -25,6 +25,7 @@ public class SecurityConfig {
 
            
             .csrf(csrf -> csrf.disable())
+            
 
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session ->
@@ -83,7 +84,8 @@ public class SecurityConfig {
         	    "http://127.0.0.1:4200",
         	    "http://localhost:5500",
         	    "http://127.0.0.1:5500",
-        	    "https://quantifyhub.vercel.app"
+        	    "https://quantifyhub.vercel.app",
+        	    "https://api-gateway-zp6d.onrender.com"
         	));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
