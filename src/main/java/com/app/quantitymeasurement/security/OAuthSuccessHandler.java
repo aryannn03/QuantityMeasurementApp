@@ -26,22 +26,25 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                                         Authentication authentication)
             throws IOException {
 
-        OAuth2User user = (OAuth2User) authentication.getPrincipal();
+        OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
 
-        String email = user.getAttribute("email");
-        String name = user.getAttribute("name");
+        String email = oauthUser.getAttribute("email");
+        String name = oauthUser.getAttribute("name");
 
-        userRepository.findById(email).orElseGet(() -> {
+        User user = userRepository.findById(email).orElse(null);
+
+        if (user == null) {
             User newUser = new User();
             newUser.setEmail(email);
             newUser.setName(name);
             newUser.setProvider("GOOGLE");
-            return userRepository.save(newUser);
-        });
+            newUser.setPassword(null); 
+            userRepository.save(newUser);
+        }
 
         String token = jwtService.generateToken(email);
 
-        response.setContentType("application/json");
-        response.getWriter().write("{\"token\":\"" + token + "\"}");
+        String redirectUrl = "http://127.0.0.1:5500/index.html?token=" + token;
+        response.sendRedirect(redirectUrl);
     }
 }
