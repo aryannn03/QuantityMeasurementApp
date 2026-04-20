@@ -1,57 +1,169 @@
-# 🚀 Quantity Measurement App - Use Case Tracking
+# Quantity Measurement App – Backend Microservices
 
-This repository contains my implementation of the **Quantity Measurement App** as part of the **BridgeLabz Training Program**.  
-The project is developed using a **Use Case (UC) based approach**, where each UC represents a new feature or enhancement.
+A production-ready backend application built using **Spring Boot Microservices Architecture**.
+This project is designed to manage secure authentication, quantity measurement operations, and centralized API routing using separate independent services.
 
----
-
-## 📌 Project Overview
-
-The Quantity Measurement App supports different types of unit measurements:
-
-- Length 📏  
-- Weight ⚖️  
-- Volume 🧪  
-- Temperature 🌡️  
-
-### ✨ Features
-- Unit comparison  
-- Unit conversion  
-- Arithmetic operations (addition, subtraction, division)  
-- Scalable backend architecture  
+It demonstrates real-world backend development concepts such as **Microservices**, **JWT Authentication**, **Spring Security**, **API Gateway**, and scalable deployment practices.
 
 ---
 
-## 📌 Use Cases
+## 🚀 Tech Stack
 
-- **UC1** → Feet Equality  
-- **UC2** → Inch Equality  
-- **UC3** → Generic Length  
-- **UC4** → Yard Equality  
-- **UC5** → Unit Conversion  
-- **UC6** → Unit Addition  
-- **UC7** → Target Unit Addition  
-- **UC8** → Standalone Unit  
-- **UC9** → Weight Measurement  
-- **UC10** → Generic Quantity  
-- **UC11** → Volume Measurement  
-- **UC12** → Subtraction & Division  
-- **UC13** → Centralized Arithmetic Logic  
-- **UC14** → Temperature Measurement  
-- **UC15** → N-Tier Architecture  
-- **UC16** → JDBC Integration  
-- **UC17** → Spring Integration  
-- **UC18** → Google Authentication (OAuth)  
+* Java 17
+* Spring Boot
+* Spring Security
+* JWT Authentication
+* Spring Cloud Gateway
+* Spring Data JPA
+* Hibernate ORM
+* MySQL / PostgreSQL
+* Maven
+* Swagger / OpenAPI
+* OAuth2 Login (Google)
+* REST APIs
 
 ---
 
-## 🛠️ Tech Stack
+## 📌 Microservices Architecture
 
-- Java  
-- Spring Framework  
-- JDBC  
-- MySQL  
-- OAuth (Google Authentication)  
+```text
+Frontend (Angular / React)
+        |
+        v
+   API Gateway
+     /     \
+    v       v
+Auth Service   QMA Service
+```
+
+This architecture separates different responsibilities into multiple services, making the system scalable, maintainable, and production-ready.
 
 ---
+
+## 🧩 Services Included
+
+### 🔐 Auth Service
+
+Responsible for authentication and user management.
+
+#### Features:
+
+* User Registration
+* User Login
+* Secure Password Encryption using BCrypt
+* JWT Access Token Generation
+* Refresh Token Support
+* Role-Based Authorization
+* Google OAuth2 Login
+* User Validation APIs
+
+#### Main Purpose:
+
+Ensures only authenticated users can access protected APIs.
+
+---
+
+### 📦 QMA Service
+
+Responsible for business logic related to quantity measurement operations.
+
+#### Features:
+
+* Create Data
+* Update Data
+* Delete Records
+* Fetch Data
+* Protected APIs using JWT
+* User-specific operations
+
+#### Main Purpose:
+
+Handles the core functionality of the application.
+
+---
+
+### 🌐 API Gateway
+
+Acts as a single entry point for all frontend requests.
+
+#### Features:
+
+* Routes requests to microservices
+* JWT Token Validation
+* Centralized API Access
+* Cross-Origin Support (CORS)
+* Security Filter Integration
+
+#### Main Purpose:
+
+Frontend communicates only with gateway instead of calling multiple services directly.
+
+---
+
+## 🔒 Security Features
+
+* JWT Authentication
+* Access Token + Refresh Token
+* BCrypt Password Hashing
+* Role-Based Access Control
+* Protected REST APIs
+* Spring Security Filters
+* OAuth2 Login Support
+
+---
+
+## 📁 Project Structure
+
+```text
+backend/
+│── auth-service/
+│   ├── controller/
+│   ├── service/
+│   ├── repository/
+│   ├── entity/
+│   └── security/
+│
+│── qma-service/
+│   ├── controller/
+│   ├── service/
+│   ├── repository/
+│   └── entity/
+│
+│── api-gateway/
+│   └── security/
+│
+└── README.md
+```
+
+---
+
+## 📖 API Documentation
+
+Swagger UI available at:
+
+```text
+https://api-gateway-zp6d.onrender.com/webjars/swagger-ui/index.html
+https://qma-service-9m9a.onrender.com/swagger-ui/index.html
+https://auth-service-2t39.onrender.com/swagger-ui/index.html
+```
+
+Use Swagger UI to test APIs directly from browser.
+
+---
+
+
+## 💡 Real World Concepts Used
+
+* Microservices Communication
+* Authentication & Authorization
+* Token Based Security
+* API Gateway Routing
+* Backend Scalability
+* Production Deployment
+
+---
+
+## 👨‍💻 Author
+
+**Aryan Malik**
 
